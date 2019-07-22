@@ -1,26 +1,7 @@
-[![Build Status](https://travis-ci.com/toxsickcoder/node-typescript-starter.svg?branch=master)](https://travis-ci.com/toxsickcoder/node-typescript-starter)
-[![GitHub issues](https://img.shields.io/github/issues/toxsickcoder/node-typescript-starter.svg)](https://github.com/toxsickcoder/node-typescript-starter/issues)
-[![GitHub license](https://img.shields.io/github/license/toxsickcoder/node-typescript-starter.svg)](https://github.com/toxsickcoder/node-typescript-starter/blob/master/LICENSE)
+[![Build Status](https://travis-ci.com/osrs-tracker/osrs-tracker-api-next.svg?branch=master)](https://travis-ci.com/osrs-tracker/osrs-tracker-api-next)
+[![GitHub issues](https://img.shields.io/github/issues/osrs-tracker/osrs-tracker-api-next.svg)](https://github.com/osrs-tracker/osrs-tracker-api-next/issues)
+[![GitHub license](https://img.shields.io/github/license/osrs-tracker/osrs-tracker-api-next.svg)](https://github.com/osrs-tracker/osrs-tracker-api-next/blob/master/LICENSE)
 
-# Node TypeScript Starter
+# OSRS Tracker API Next
 
-Since I make a lot of projects, I created this **Node TypeScript Starter** to easily create a new Node project with TypeScript.
-
-## Getting started
-
-- `git clone https://github.com/toxsickcoder/node-typescript-starter.git`
-- `npm install`
-- `npm start`
-
-The application will build and run the **Node Typescript Starter**.
-
-## Features
-
-- TSLint
-- Strict TSConfig
-- EditorConfig
-- Different configs for Dev and Prod
-- Webpack watch (nodemon)
-- BundleAnalyser
-- Docker
-- Travis CI (Docker build)
+A new implementation for the OSRS Tracker API. Completely reworked from the ground up.
