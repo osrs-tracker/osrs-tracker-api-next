@@ -5,7 +5,7 @@ export const config: IConfig = {
   ...globalConfig,
 
   corsOptions: {
-    origin: ['http://localhost:8080'],
+    origin: ['localhost:8080'],
   },
   prometheusOptions: {
     autoregister: false,

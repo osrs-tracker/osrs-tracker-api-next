@@ -8,14 +8,21 @@ export const requestLogger = (blacklist: string[] = []): RequestHandler => (
 ) => {
   const start = process.hrtime();
 
-  next();
-
-  if (blacklist.some(url => req.originalUrl.startsWith(url))) return;
+  if (blacklist.some(url => req.originalUrl.startsWith(url))) return next();
 
   res.on('finish', () => {
     const end = process.hrtime(start);
     const elapsedTime = `${Math.floor(end[0] * 1000 + end[1] / 1000000)}ms`;
 
-    Logger.log(req.method, req.originalUrl + ';', res.statusCode, res.statusMessage + ';', elapsedTime);
+    Logger.log(
+      req.method,
+      req.originalUrl + ';',
+      res.statusCode,
+      res.statusMessage + ';',
+      'Response time:',
+      elapsedTime,
+    );
   });
+
+  next();
 };
