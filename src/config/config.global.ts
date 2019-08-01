@@ -17,5 +17,5 @@ export const globalConfig: IConfigGlobal = {
     includeMethod: true,
     includePath: true,
   },
-  workerCount: Number(process.env.PORT) || os.cpus().length,
+  workerCount: Number(process.env.WORKER_COUNT) || os.cpus().length,
 };
