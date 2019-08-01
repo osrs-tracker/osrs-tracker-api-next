@@ -4,34 +4,49 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import prometheusMetricsMiddleware from 'express-prom-bundle';
 import helmet from 'helmet';
+import { MongoClient } from 'mongodb';
 import { config } from '../config/config';
 import { Logger } from './common/logger';
 import { requestLogger } from './middleware/logger.middleware';
-import { MongoClient } from 'mongodb';
 import { HealthRouterFactory } from './routers/health.router-factory';
+import { Server } from 'http';
 
 export class App {
   readonly express: Application;
   readonly mongo: MongoClient;
 
+  private _server?: Server;
+  private _worker!: Worker;
+
   static async run(worker: Worker): Promise<App> {
-    const app = new App();
-    await app.start(worker);
+    const app = new App(worker);
+    try {
+      await app.start();
+    } catch (e) {
+      app.kill();
+    }
     return app;
   }
 
-  private constructor() {
+  public kill(): void {
+    this.mongo.close(true);
+    if (this._server) this._server.close();
+    this._worker.kill();
+  }
+
+  private constructor(worker: Worker) {
+    this._worker = worker;
     this.express = express();
     this.mongo = new MongoClient(config.mongo.url, config.mongo.options);
 
     this.setupMiddleware();
   }
 
-  private async start(worker: Worker): Promise<void> {
+  private async start(): Promise<void> {
     await this.mongo.connect();
 
-    this.express.listen(config.port, () => {
-      Logger.log(`WORKER ${worker.id} CREATED ON PORT ${config.port}`);
+    this._server = this.express.listen(config.port, () => {
+      Logger.log(`WORKER ${this._worker.id} CREATED ON PORT ${config.port}`);
       this.setupRouters();
     });
   }
