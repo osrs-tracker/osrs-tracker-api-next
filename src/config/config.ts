@@ -5,10 +5,18 @@ export const config: IConfig = {
   ...globalConfig,
 
   corsOptions: {},
-  prometheusOptions: {
-    autoregister: false,
-    customLabels: { app: 'osrs-tracker-api' },
-    includeMethod: true,
-    includePath: true,
+  mongo: {
+    url: process.env.MONGO_URL!,
+    database: process.env.MONGO_DATABASE!,
+    options: {
+      auth: {
+        user: process.env.MONGO_USER!,
+        password: process.env.MONGO_PASSWORD!,
+      },
+      authSource: process.env.MONGO_AUTH_SOURCE,
+      authMechanism: 'SCRAM-SHA-1',
+      autoReconnect: true,
+      useNewUrlParser: true,
+    },
   },
 };

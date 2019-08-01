@@ -1,8 +1,12 @@
 import { CorsOptions } from 'cors';
-import { Opts } from 'express-prom-bundle/types';
 import { IConfigGlobal } from './config.global';
+import { MongoClientOptions } from 'mongodb';
 
 export interface IConfig extends IConfigGlobal {
   corsOptions: CorsOptions;
-  prometheusOptions: Opts;
+  mongo: {
+    url: string,
+    database: string,
+    options: MongoClientOptions,
+  };
 }

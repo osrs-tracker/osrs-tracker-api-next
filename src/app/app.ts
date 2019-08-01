@@ -7,47 +7,45 @@ import helmet from 'helmet';
 import { config } from '../config/config';
 import { Logger } from './common/logger';
 import { requestLogger } from './middleware/logger.middleware';
+import { MongoClient } from 'mongodb';
+import { HealthRouterFactory } from './routers/health.router-factory';
 
 export class App {
-  private _app: Application;
+  readonly express: Application;
+  readonly mongo: MongoClient;
 
-  static run(worker: Worker): App {
+  static async run(worker: Worker): Promise<App> {
     const app = new App();
-    app.start(worker);
+    await app.start(worker);
     return app;
   }
 
   private constructor() {
-    this._app = express();
+    this.express = express();
+    this.mongo = new MongoClient(config.mongo.url, config.mongo.options);
 
     this.setupMiddleware();
-    this.setupRouters();
   }
 
-  private start(worker: Worker): void {
-    this._app.listen(config.port, () => {
+  private async start(worker: Worker): Promise<void> {
+    await this.mongo.connect();
+
+    this.express.listen(config.port, () => {
       Logger.log(`WORKER ${worker.id} CREATED ON PORT ${config.port}`);
       this.setupRouters();
     });
   }
 
   private setupMiddleware(): void {
-    this._app.use(helmet({ noCache: true }));
-    this._app.use(cors(config.corsOptions));
-    this._app.use(bodyParser.urlencoded({ extended: true }));
-    this._app.use(bodyParser.json());
-    this._app.use(requestLogger(['/health', '/metrics']));
-    this._app.use(
-      prometheusMetricsMiddleware({
-        autoregister: false,
-        customLabels: { app: 'osrs-tracker-api' },
-        includeMethod: true,
-        includePath: true,
-      }),
-    );
+    this.express.use(helmet({ noCache: true }));
+    this.express.use(cors(config.corsOptions));
+    this.express.use(prometheusMetricsMiddleware(config.prometheusOptions));
+    this.express.use(bodyParser.urlencoded({ extended: true }));
+    this.express.use(bodyParser.json());
+    this.express.use(requestLogger(['/health']));
   }
 
   private setupRouters(): void {
-    // TODO:
+    [new HealthRouterFactory()].forEach(factory => factory.create(this));
   }
 }
