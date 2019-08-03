@@ -14,7 +14,8 @@ export const requestLogger = (blacklist: string[] = []): RequestHandler => (
     const end = process.hrtime(start);
     const elapsedTime = `${Math.floor(end[0] * 1000 + end[1] / 1000000)}ms`;
 
-    Logger.log(
+    Logger.logTask(
+      'REQUEST_LOGGER',
       req.method,
       req.originalUrl + ';',
       res.statusCode,

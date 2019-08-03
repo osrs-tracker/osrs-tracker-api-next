@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import cluster from 'cluster';
 import * as express from 'express';
 import { clusterMetrics } from 'express-prom-bundle';

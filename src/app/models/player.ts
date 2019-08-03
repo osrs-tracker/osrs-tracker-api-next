@@ -1,6 +1,8 @@
+import { Type } from 'class-transformer';
+import { Views } from './view';
 
-export interface Hiscore {
-  [skill: string]: [number, number, number];
+export class Hiscore {
+  [skill: string]: [number, number, number?];
 }
 
 export enum PlayerType {
@@ -18,15 +20,26 @@ export enum PlayerState {
   DeadDeIroned = 4,
 }
 
+export class Datapoint {
+  @Type(() => Date)
+  date!: Date;
+  @Type(() => Hiscore)
+  hiscore!: Hiscore;
+}
+
+export class Xp {
+  @Type(() => Date)
+  lastScrape?: Date;
+  @Type(() => Datapoint)
+  datapoints!: Datapoint[];
+}
+
 export class Player {
-  constructor(
-    public username: string,
-    public type: PlayerType,
-    public state: PlayerState,
-    public xp: {
-      lastScrape: Date,
-      datapoints: { date: Date, hiscore: Hiscore }[],
-    },
-    public views: { [page: string]: Date[] },
-  ) { }
+  username!: string;
+  type!: PlayerType;
+  state!: PlayerState;
+  @Type(() => Xp)
+  xp!: Xp;
+  @Type(() => Views)
+  views!: Views;
 }

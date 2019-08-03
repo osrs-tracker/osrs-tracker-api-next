@@ -4,12 +4,14 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import prometheusMetricsMiddleware from 'express-prom-bundle';
 import helmet from 'helmet';
+import { Server } from 'http';
 import { MongoClient } from 'mongodb';
 import { config } from '../config/config';
 import { Logger } from './common/logger';
 import { requestLogger } from './middleware/logger.middleware';
 import { HealthRouterFactory } from './routers/health.router-factory';
-import { Server } from 'http';
+import { ProxyRouterFactory } from './routers/proxy.router-factory';
+import { errorHandler } from './middleware/error-handler.middleware';
 
 export class App {
   readonly express: Application;
@@ -40,6 +42,8 @@ export class App {
     this.mongo = new MongoClient(config.mongo.url, config.mongo.options);
 
     this.setupMiddleware();
+    this.setupRouters();
+    this.express.use(errorHandler());
   }
 
   private async start(): Promise<void> {
@@ -47,7 +51,6 @@ export class App {
 
     this._server = this.express.listen(config.port, () => {
       Logger.log(`WORKER ${this._worker.id} CREATED ON PORT ${config.port}`);
-      this.setupRouters();
     });
   }
 
@@ -61,6 +64,9 @@ export class App {
   }
 
   private setupRouters(): void {
-    [new HealthRouterFactory()].forEach(factory => factory.create(this));
+    [
+      new HealthRouterFactory(),
+      new ProxyRouterFactory(),
+    ].forEach(factory => factory.create(this));
   }
 }

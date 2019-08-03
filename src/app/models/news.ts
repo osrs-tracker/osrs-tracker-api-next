@@ -5,7 +5,21 @@ export class Vote {
   ) { }
 }
 
-export class NewsPost {
+export class NewsPostOSRS {
+  constructor(
+    public title: string,
+    public pubDate: Date,
+    public link: string,
+    public description: string,
+    public enclosure: {
+      link: string;
+      type: string;
+    },
+    public categories: string[],
+  ) { }
+}
+
+export class NewsPostApp {
   constructor(
     public uuid: number,
     public title: string,
