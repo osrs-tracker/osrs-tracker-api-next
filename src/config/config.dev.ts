@@ -7,7 +7,7 @@ export const config: IConfig = {
   ...globalConfig,
 
   corsOptions: {
-    origin: ['localhost:8080'],
+    origin: ['http://localhost:8100'],
   },
   mongo: {
     url: hidden.mongo.url,

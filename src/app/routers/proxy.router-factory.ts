@@ -1,27 +1,27 @@
 import { Router } from 'express';
-import { MongoClient } from 'mongodb';
 import { App } from '../app';
 import { ProxyRepository } from '../repositories/proxy.repository';
 import { RouterFactory } from './router-factory.interface';
 
 export class ProxyRouterFactory implements RouterFactory {
 
-  create({ express, mongo }: App): void {
+  create({ express }: App): void {
     const router = Router();
 
-    this.setupRoutes(router, mongo);
+    this.setupRoutes(router);
 
     express.use('/proxy', router);
   }
 
-  private setupRoutes(router: Router, mongo: MongoClient): void {
-    this.getHiscore(router, mongo);
-    this.getItem(router, mongo);
-    this.getItemGraph(router, mongo);
-    this.getLatestNews(router, mongo);
+  private setupRoutes(router: Router): void {
+    this.getHiscore(router);
+    this.getItem(router);
+    this.getItemGraph(router);
+    this.getLatestNews(router);
+    this.getWikiSearchResults(router);
   }
 
-  private getHiscore(router: Router, mongo: MongoClient): void {
+  private getHiscore(router: Router): void {
     router.get('/hiscore/:username', async (req, res, next) => {
       try {
         const hiscore = await ProxyRepository.getHiscore({ username: req.params.username, type: req.query.type });
@@ -33,7 +33,7 @@ export class ProxyRouterFactory implements RouterFactory {
     });
   }
 
-  private getItem(router: Router, mongo: MongoClient): void {
+  private getItem(router: Router): void {
     router.get('/item/:id', async (req, res, next) => {
       try {
         const item = await ProxyRepository.getItem(req.params.id);
@@ -45,7 +45,7 @@ export class ProxyRouterFactory implements RouterFactory {
     });
   }
 
-  private getItemGraph(router: Router, mongo: MongoClient): void {
+  private getItemGraph(router: Router): void {
     router.get('/item/:id/graph', async (req, res, next) => {
       try {
         const itemGraph = await ProxyRepository.getItemGraph(req.params.id);
@@ -57,11 +57,23 @@ export class ProxyRouterFactory implements RouterFactory {
     });
   }
 
-  private getLatestNews(router: Router, mongo: MongoClient): void {
+  private getLatestNews(router: Router): void {
     router.get('/news', async (req, res, next) => {
       try {
         const news = await ProxyRepository.getLatestNews();
         res.status(200).json(news);
+      } catch (e) {
+        next(e);
+      }
+    });
+  }
+
+  private getWikiSearchResults(router: Router): void {
+    router.get('/wiki/:query', async (req, res, next) => {
+      try {
+        const news = await ProxyRepository.getWikiSearchResults(req.params.query, req.query.limit);
+        if (news.length > 0) res.status(200).json(news);
+        else res.sendStatus(204);
       } catch (e) {
         next(e);
       }

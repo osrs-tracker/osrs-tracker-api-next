@@ -12,6 +12,11 @@ import { errorHandler } from './middleware/error-handler.middleware';
 import { requestLogger } from './middleware/logger.middleware';
 import { HealthRouterFactory } from './routers/health.router-factory';
 import { ProxyRouterFactory } from './routers/proxy.router-factory';
+import { PlayerRouterFactory } from './routers/player.router-factory';
+import { ItemRouterFactory } from './routers/item.router-factory';
+import { IconRouterFactory } from './routers/icon.router-factory';
+import { NewsRouterFactory } from './routers/news.router-factory';
+import { XpRouterFactory } from './routers/xp.router-factory';
 
 export class App {
   readonly express: Application;
@@ -67,6 +72,11 @@ export class App {
     [
       new HealthRouterFactory(),
       new ProxyRouterFactory(),
+      new IconRouterFactory(),
+      new ItemRouterFactory(),
+      new NewsRouterFactory(),
+      new PlayerRouterFactory(),
+      new XpRouterFactory(),
     ].forEach(factory => factory.create(this));
   }
 }
