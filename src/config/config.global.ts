@@ -2,6 +2,7 @@ import os from 'os';
 import { Opts } from 'express-prom-bundle/types';
 
 export interface IConfigGlobal {
+  backCompBaseUrl: string;
   port: number;
   portMetrics: number;
   prometheusOptions: Opts;
@@ -9,6 +10,7 @@ export interface IConfigGlobal {
 }
 
 export const globalConfig: IConfigGlobal = {
+  backCompBaseUrl: 'https://api.greendemon.io/osrs-tracker',
   port: Number(process.env.PORT) || 8080,
   portMetrics: Number(process.env.PORT_METRICS) || 8088,
   prometheusOptions: {
