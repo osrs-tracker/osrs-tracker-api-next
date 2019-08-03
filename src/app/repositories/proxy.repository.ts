@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { plainToClass } from 'class-transformer';
 import { HiscoreUtils } from '../common/utils/hiscore.utils';
-import { ItemGraph, Item } from '../models/item';
-import { Hiscore, PlayerType } from '../models/player';
-import xml2js from 'xml2js';
+import { XMLUtils } from '../common/utils/xml.utils';
+import { Item, ItemGraph } from '../models/item';
 import { NewsPostOSRS } from '../models/news';
+import { Hiscore, PlayerType } from '../models/player';
 
 const OSRS_BASE_URL = 'https://services.runescape.com';
 
@@ -54,7 +54,7 @@ export class ProxyRepository {
   static async getLatestNews(): Promise<any> {
     const response = await axios.get<string>(`${OSRS_BASE_URL}/m=news/latest_news.rss?oldschool=true`, { timeout: 1000 });
 
-    const parsedXML = await this.parseXml(response.data);
+    const parsedXML = await XMLUtils.parseXml(response.data);
 
     const newsPosts = parsedXML.rss.channel[0].item.map((item: any) => new NewsPostOSRS(
       item.title,
@@ -69,15 +69,6 @@ export class ProxyRepository {
     ));
 
     return newsPosts;
-  }
-
-  private static parseXml(xml: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      xml2js.parseString(xml, (err, result) => {
-        if (err) reject(err);
-        resolve(result);
-      });
-    });
   }
 
   private static buildHiscoreUrl(options: HiscoreFetchOptions): string {

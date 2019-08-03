@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, ErrorRequestHandler } from 'express-serve-static-core';
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express-serve-static-core';
 import { Logger } from '../common/logger';
 
 export const errorHandler = (): ErrorRequestHandler => (

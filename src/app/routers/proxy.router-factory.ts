@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { MongoClient } from 'mongodb';
 import { App } from '../app';
-import { RouterFactory } from './router-factory.interface';
 import { ProxyRepository } from '../repositories/proxy.repository';
+import { RouterFactory } from './router-factory.interface';
 
 export class ProxyRouterFactory implements RouterFactory {
 

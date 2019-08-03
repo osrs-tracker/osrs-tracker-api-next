@@ -1,4 +1,4 @@
-import { Type, Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 
 export enum Trend {
   Negative = 'negative',

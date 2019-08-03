@@ -8,10 +8,10 @@ import { Server } from 'http';
 import { MongoClient } from 'mongodb';
 import { config } from '../config/config';
 import { Logger } from './common/logger';
+import { errorHandler } from './middleware/error-handler.middleware';
 import { requestLogger } from './middleware/logger.middleware';
 import { HealthRouterFactory } from './routers/health.router-factory';
 import { ProxyRouterFactory } from './routers/proxy.router-factory';
-import { errorHandler } from './middleware/error-handler.middleware';
 
 export class App {
   readonly express: Application;
