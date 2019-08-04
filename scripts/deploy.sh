@@ -5,7 +5,7 @@ VERSION=$(node -p "require('./package.json').version");
 
 DOCKER_USERNAME="toxsickcoder"
 
-docker build -t "$DOCKER_USERNAME/$NAME:$VERSION" -t "$DOCKER_USERNAME/$NAME:latest" .
+docker build -t "$DOCKER_USERNAME/$NAME:$VERSION" -t "$DOCKER_USERNAME/$NAME:next" .
 
 docker login -u "$DOCKER_USERNAME"
 
