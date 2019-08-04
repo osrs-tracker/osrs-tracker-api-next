@@ -10,7 +10,7 @@ export interface IConfigGlobal {
 }
 
 export const globalConfig: IConfigGlobal = {
-  backCompBaseUrl: 'https://api.greendemon.io/osrs-tracker',
+  backCompBaseUrl: process.env.BACK_COMP_BASE_URL || 'https://api.greendemon.io/osrs-tracker',
   port: Number(process.env.PORT) || 8080,
   portMetrics: Number(process.env.PORT_METRICS) || 8088,
   prometheusOptions: {

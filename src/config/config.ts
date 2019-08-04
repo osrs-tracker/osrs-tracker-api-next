@@ -4,7 +4,9 @@ import { IConfig } from './config.interface';
 export const config: IConfig = {
   ...globalConfig,
 
-  corsOptions: {},
+  corsOptions: {
+    origin: ['https://osrs-tracker.greendemon.io'],
+  },
   mongo: {
     url: process.env.MONGO_URL!,
     database: process.env.MONGO_DATABASE!,
