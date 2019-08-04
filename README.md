@@ -8,9 +8,9 @@ A new implementation for the OSRS Tracker API. Completely reworked from the grou
 
 ## Environment variables
 
-**BACK_COMP_BASE_URL**: Base url of the old api for backcomp.
+**BACK_COMP_BASE_URL**: Base url of the old api for backcomp (default `'https://api.greendemon.io/osrs-tracker'`).
 
-**MONGO_URL**: The url to the mongo database (default `'https://api.greendemon.io/osrs-tracker'`).  
+**MONGO_URL**: The url to the mongo database.  
 **MONGO_DATABASE**: The name of the mongo database.  
 **MONGO_USER**: The user of the mongo database.  
 **MONGO_PASSWORD**: The password for the mongo database user.  
