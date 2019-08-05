@@ -9,8 +9,8 @@
     "start:prod": "webpack --progress --env.nodemon",
     "build:prod": "webpack --progress",
     "build:ci": "webpack",
-    "build:docker": "docker build --rm -t toxsickcoder/osrs-tracker-api:dev .",
-    "deploy:docker": "sh ./scripts/deploy.sh",
+    "docker:build": "docker build --rm -t toxsickcoder/osrs-tracker-api:dev .",
+    "docker:deploy": "sh ./scripts/deploy.sh",
     "analyse:dev": "webpack --progress --env.development --env.analyse && start dist/report.html",
     "analyse:prod": "webpack --progress --env.analyse && start dist/report.html",
     "lint": "tslint --project ."
