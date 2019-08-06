@@ -1,7 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { Logger } from '../common/logger';
 
-export const requestLogger = (blacklist: string[] = []): RequestHandler => (
+export const responseLogger = (blacklist: string[] = []): RequestHandler => (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -14,15 +14,20 @@ export const requestLogger = (blacklist: string[] = []): RequestHandler => (
     const end = process.hrtime(start);
     const elapsedTime = `${Math.floor(end[0] * 1000 + end[1] / 1000000)}ms`;
 
-    Logger.logTask(
-      'REQUEST_LOGGER',
+    const message = [
       req.method,
       req.originalUrl + ';',
       res.statusCode,
       res.statusMessage + ';',
       'Response time:',
       elapsedTime,
-    );
+    ];
+
+    if (res.getHeader('x-cache-timestamp')) {
+      message.push('from cache');
+    }
+
+    Logger.logTask('REQUEST_LOGGER', ...message);
   });
 
   next();

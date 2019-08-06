@@ -9,13 +9,14 @@ import { MongoClient } from 'mongodb';
 import { config } from '../config/config';
 import { Logger } from './common/logger';
 import { errorHandler } from './middleware/error-handler.middleware';
-import { requestLogger } from './middleware/logger.middleware';
+import { responseCache } from './middleware/response-cache.middleware';
+import { responseLogger } from './middleware/response-logger.middleware';
 import { HealthRouterFactory } from './routers/health.router-factory';
-import { ProxyRouterFactory } from './routers/proxy.router-factory';
-import { PlayerRouterFactory } from './routers/player.router-factory';
-import { ItemRouterFactory } from './routers/item.router-factory';
 import { IconRouterFactory } from './routers/icon.router-factory';
+import { ItemRouterFactory } from './routers/item.router-factory';
 import { NewsRouterFactory } from './routers/news.router-factory';
+import { PlayerRouterFactory } from './routers/player.router-factory';
+import { ProxyRouterFactory } from './routers/proxy.router-factory';
 import { XpRouterFactory } from './routers/xp.router-factory';
 
 export class App {
@@ -65,7 +66,12 @@ export class App {
     this.express.use(prometheusMetricsMiddleware(config.prometheusOptions));
     this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(bodyParser.json());
-    this.express.use(requestLogger(['/health']));
+    this.express.use(responseLogger(['/health']));
+    this.express.use(responseCache([
+      { path: '/proxy/hiscore', lifetime: 30 },
+      { path: '/proxy/item', lifetime: 300 },
+      { path: '/proxy/news', lifetime: 300 },
+    ]));
   }
 
   private setupRouters(): void {
