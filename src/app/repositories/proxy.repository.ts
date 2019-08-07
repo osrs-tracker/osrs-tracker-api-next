@@ -4,11 +4,11 @@ import { HiscoreUtils } from '../common/utils/hiscore.utils';
 import { XMLUtils } from '../common/utils/xml.utils';
 import { Item, ItemGraph } from '../models/item';
 import { NewsPostOSRS } from '../models/news';
-import { Hiscore, PlayerType } from '../models/player';
+import { Hiscore } from '../models/player';
 
 export type HiscoreFetchOptions = {
   username: string,
-  type?: PlayerType,
+  type?: string,
 };
 
 export type WikiSearchResult = {
@@ -90,11 +90,11 @@ export class ProxyRepository {
 
   private static buildHiscoreUrl(options: HiscoreFetchOptions): string {
     switch (options.type) {
-      case PlayerType.Ironman:
+      case 'ironman':
         return `${this.OSRS_BASE_URL}/m=hiscore_oldschool_ironman/index_lite.ws?player=${options.username}`;
-      case PlayerType.Ultimate:
+      case 'ultimate':
         return `${this.OSRS_BASE_URL}/m=hiscore_oldschool_ultimate/index_lite.ws?player=${options.username}`;
-      case PlayerType.HardcoreIronman:
+      case 'hardcore':
         return `${this.OSRS_BASE_URL}/m=hiscore_oldschool_hardcore/index_lite.ws?player=${options.username}`;
       default:
         return `${this.OSRS_BASE_URL}/m=hiscore_oldschool/index_lite.ws?player=${options.username}`;
