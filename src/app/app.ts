@@ -68,7 +68,6 @@ export class App {
     this.express.use(bodyParser.json());
     this.express.use(responseLogger(['/health']));
     this.express.use(responseCache([
-      { path: '/proxy/hiscore', lifetime: 30 },
       { path: '/proxy/item', lifetime: 300 },
       { path: '/proxy/news', lifetime: 300 },
     ]));
