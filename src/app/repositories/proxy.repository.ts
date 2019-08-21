@@ -93,9 +93,11 @@ export class ProxyRepository {
       case 'ironman':
         return `${this.OSRS_BASE_URL}/m=hiscore_oldschool_ironman/index_lite.ws?player=${options.username}`;
       case 'ultimate':
+      case 'ultimate_ironman':
         return `${this.OSRS_BASE_URL}/m=hiscore_oldschool_ultimate/index_lite.ws?player=${options.username}`;
       case 'hardcore':
-        return `${this.OSRS_BASE_URL}/m=hiscore_oldschool_hardcore/index_lite.ws?player=${options.username}`;
+      case 'hardcore_ironman':
+        return `${this.OSRS_BASE_URL}/m=hiscore_oldschool_hardcore_ironman/index_lite.ws?player=${options.username}`;
       default:
         return `${this.OSRS_BASE_URL}/m=hiscore_oldschool/index_lite.ws?player=${options.username}`;
     }
