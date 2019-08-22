@@ -1,11 +1,11 @@
 
 import Axios from 'axios';
-import { createWriteStream, exists, mkdir, readFile, stat, Stats, unlinkSync, unlink } from 'fs';
+import { createWriteStream, exists, mkdir, readFile, stat, unlink } from 'fs';
 import { join } from 'path';
 import { Stream } from 'stream';
+import { promisify } from 'util';
 import { Logger } from '../common/logger';
 import { ProxyRepository } from '../repositories/proxy.repository';
-import { promisify } from 'util';
 
 export class IconRepository {
 
