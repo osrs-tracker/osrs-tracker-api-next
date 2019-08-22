@@ -1,9 +1,8 @@
 import { Router } from 'express';
 import { MongoClient } from 'mongodb';
 import { App } from '../app';
+import { IconRepository } from '../repositories/icon.repository';
 import { RouterFactory } from './router-factory.interface';
-import Axios from 'axios';
-import { config } from '../../config/config';
 
 export class IconRouterFactory implements RouterFactory {
 
@@ -16,25 +15,25 @@ export class IconRouterFactory implements RouterFactory {
   }
 
   private setupRoutes(router: Router, mongo: MongoClient): void {
-    this.iconProxy(router, mongo);
+    this.getIcon(router);
   }
 
-  /**
-   * PROXY TO OLD API FOR BACKCOMP SUPPORT.
-   */
-  private iconProxy(router: Router, mongo: MongoClient): void {
+  private getIcon(router: Router): void {
     router.get('/:id', async (req, res, next) => {
-
       try {
-        const result = await Axios.get<Blob>(config.backCompBaseUrl + req.originalUrl, {
-          responseType: 'arraybuffer',
-        });
+        const id = req.params.id;
+        const icon = await IconRepository.getIcon(id);
+
+        if (!icon) {
+          return res.sendStatus(404);
+        }
+
         res.type('image/gif');
         res.setHeader('Cache-Control', 'public, max-age=31536000');
-        res.setHeader('Content-Disposition', `inline; filename="${req.params.id}.gif"`);
-        res.send(result.data);
+        res.setHeader('Content-Disposition', `inline; filename="${id}.gif"`);
+        res.status(200).send(icon);
       } catch (e) {
-        res.status(e.response.status).send(e.response.data);
+        next(e);
       }
     });
   }

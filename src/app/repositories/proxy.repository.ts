@@ -38,9 +38,9 @@ export class ProxyRepository {
     }
   }
 
-  static async getItem(id: number): Promise<any | null> {
+  static async getItem(id: number): Promise<Item | null> {
     try {
-      const response = await Axios.get<any>(`${this.OSRS_BASE_URL}/m=itemdb_oldschool/api/catalogue/detail.json?item=${id}`, { timeout: this.MAX_OSRS_API_TIMOUT });
+      const response = await Axios.get<{ item: Item }>(`${this.OSRS_BASE_URL}/m=itemdb_oldschool/api/catalogue/detail.json?item=${id}`, { timeout: this.MAX_OSRS_API_TIMOUT });
       return plainToClass(Item, response.data.item);
     } catch (err) {
       if (err.response.status === 404) return null;
