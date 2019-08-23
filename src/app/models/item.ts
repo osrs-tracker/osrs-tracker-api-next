@@ -1,4 +1,5 @@
 import { Exclude, Type } from 'class-transformer';
+import { Views } from './view';
 
 export enum Trend {
   Negative = 'negative',
@@ -16,7 +17,7 @@ export class Change {
   trend!: Trend;
 }
 
-export class Item {
+export class ItemProxy {
   id!: number;
   name!: string;
   description!: string;
@@ -47,4 +48,15 @@ export class Item {
 export class ItemGraph {
   daily!: { [timestamp: string]: number };
   average!: { [timestamp: string]: number };
+}
+
+export class Item {
+  id!: number;
+  name!: string;
+
+  @Type(() => ItemProxy)
+  item!: ItemProxy;
+
+  @Type(() => Views)
+  views!: Views;
 }

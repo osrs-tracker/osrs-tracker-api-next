@@ -6,6 +6,8 @@ import { RouterFactory } from './router-factory.interface';
 
 export class IconRouterFactory implements RouterFactory {
 
+
+
   create({ express, mongo }: App): void {
     const router = Router();
 
