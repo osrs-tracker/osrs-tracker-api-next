@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { plainToClass } from 'class-transformer';
 import { HiscoreUtils } from '../common/utils/hiscore.utils';
 import { XMLUtils } from '../common/utils/xml.utils';
-import { Item, ItemGraph } from '../models/item';
+import { ItemProxy, ItemGraph } from '../models/item';
 import { NewsPostOSRS } from '../models/news';
 import { Hiscore } from '../models/player';
 
@@ -38,10 +38,10 @@ export class ProxyRepository {
     }
   }
 
-  static async getItem(id: number): Promise<Item | null> {
+  static async getItem(id: number): Promise<ItemProxy | null> {
     try {
-      const response = await Axios.get<{ item: Item }>(`${this.OSRS_BASE_URL}/m=itemdb_oldschool/api/catalogue/detail.json?item=${id}`, { timeout: this.MAX_OSRS_API_TIMOUT });
-      return plainToClass(Item, response.data.item);
+      const response = await Axios.get<{ item: ItemProxy }>(`${this.OSRS_BASE_URL}/m=itemdb_oldschool/api/catalogue/detail.json?item=${id}`, { timeout: this.MAX_OSRS_API_TIMOUT });
+      return plainToClass(ItemProxy, response.data.item);
     } catch (err) {
       if (err.response.status === 404) return null;
       else throw err;

@@ -3,11 +3,17 @@ import Axios from 'axios';
 import { createWriteStream, exists, mkdir, readFile, stat, unlink } from 'fs';
 import { join } from 'path';
 import { Stream } from 'stream';
+import { URL } from 'url';
 import { promisify } from 'util';
 import { Logger } from '../common/logger';
 import { ProxyRepository } from '../repositories/proxy.repository';
 
 export class IconRepository {
+
+  static readonly ICON_URL_CACHE_TIME = 60 * 1000;
+
+  static cachedIconUrl: URL | null = null;
+  static cachedIconUrlTimestamp: number = 0;
 
   static async getIcon(id: string): Promise<Buffer | null> {
     const iconFolderPath = join(__dirname, '/icons/');
@@ -35,7 +41,7 @@ export class IconRepository {
     }
   }
 
-  /** Verifies if the icon exists, and will delete it if it has a size of 0. */
+  /** Verifies if the icon exists, and will error if it has a size of 0. */
   private static async verifyIcon(path: string): Promise<void> {
     const stats = await promisify(stat)(path);
 
@@ -45,11 +51,24 @@ export class IconRepository {
     }
   }
 
-  /** Fetches the item and retrieves the icon url from the response. */
+  /**
+   * Fetches the item and retrieves the icon url from the response.
+   * Caches the url for icons because we can't query the items too much or we'll get shadowbanned.
+   */
   private static async getIconUrl(id: string): Promise<string | null> {
+    if (Date.now() - this.cachedIconUrlTimestamp < this.ICON_URL_CACHE_TIME && this.cachedIconUrl) {
+      this.cachedIconUrl.searchParams.set('id', id);
+      return this.cachedIconUrl.href;
+    }
     try {
       const item = await ProxyRepository.getItem(Number(id));
-      return item ? item.icon_large : item;
+      if (!item) return null;
+
+      const iconUrl = new URL(item.icon_large);
+      this.cachedIconUrl = iconUrl;
+      this.cachedIconUrlTimestamp = Date.now();
+
+      return iconUrl.href;
     } catch (e) {
       return null;
     }
