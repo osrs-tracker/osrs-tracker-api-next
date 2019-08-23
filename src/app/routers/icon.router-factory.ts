@@ -1,22 +1,19 @@
 import { Router } from 'express';
-import { MongoClient } from 'mongodb';
 import { App } from '../app';
 import { IconRepository } from '../repositories/icon.repository';
 import { RouterFactory } from './router-factory.interface';
 
 export class IconRouterFactory implements RouterFactory {
 
-
-
-  create({ express, mongo }: App): void {
+  create({ express }: App): void {
     const router = Router();
 
-    this.setupRoutes(router, mongo);
+    this.setupRoutes(router);
 
     express.use('/icon', router);
   }
 
-  private setupRoutes(router: Router, mongo: MongoClient): void {
+  private setupRoutes(router: Router): void {
     this.getIcon(router);
   }
 
@@ -26,9 +23,7 @@ export class IconRouterFactory implements RouterFactory {
         const id = req.params.id;
         const icon = await IconRepository.getIcon(id);
 
-        if (!icon) {
-          return res.sendStatus(404);
-        }
+        if (!icon) return res.sendStatus(404);
 
         res.type('image/gif');
         res.setHeader('Cache-Control', 'public, max-age=31536000');

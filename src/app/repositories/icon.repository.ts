@@ -3,10 +3,10 @@ import Axios from 'axios';
 import { createWriteStream, exists, mkdir, readFile, stat, unlink } from 'fs';
 import { join } from 'path';
 import { Stream } from 'stream';
+import { URL } from 'url';
 import { promisify } from 'util';
 import { Logger } from '../common/logger';
 import { ProxyRepository } from '../repositories/proxy.repository';
-import { URL } from 'url';
 
 export class IconRepository {
 
@@ -41,7 +41,7 @@ export class IconRepository {
     }
   }
 
-  /** Verifies if the icon exists, and will delete it if it has a size of 0. */
+  /** Verifies if the icon exists, and will error if it has a size of 0. */
   private static async verifyIcon(path: string): Promise<void> {
     const stats = await promisify(stat)(path);
 
